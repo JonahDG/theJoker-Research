@@ -42,7 +42,7 @@ def getJokerRVData(allVisits,sources):
         data.append(datum)
     return data
 
-# getLightCurveData returns Ligh Curve Data Table from lightkurve
+# getLightCurveData returns Light Curve Data Table from lightkurve as a Data Table
 def getLightCurveData(sources):
     ticList=[]
     timeList=[]
@@ -77,6 +77,21 @@ def getLightCurveData(sources):
                                                                             'Flux_err'))
     return lcDataTable
 
-# 
+# getLsPeriodogram returns Lomb Scargle Periodogram from Astropy as a Data Table
+def getLsPeriodogram(sources):
+    freqList=[]
+    powList=[]
+    lcData=getLightCurveData(sources)
+    for i in range(len(sources['MAP_P'])):
+        period=float(sources[i]['MAP_P']/u.d)
+        timeViaLC=lcData[i]['Time']
+        fluxViaLC=lcData[i]['Flux']
+        freq,pow=LombScargle(timeViaLC,fluxViaLC).autopower(minimum_frequency=(.1/period),maximum_frequency=(10./period))
+        freqList.append(freq)
+        powList.append(pow)
+    periodogramDataTable=at.QTable([freqList,powList],names=('Frequency,Power'))
+    return periodogramDataTable
 
-        
+# getPlots returns nothing but saves individual plots as pngs and one file as pdf
+def getPlots(osurces,jData,periodogram,joker,prior_sample):
+    pdf=FPDF(unit='in',format=[8.5,11])
