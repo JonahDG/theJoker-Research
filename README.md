@@ -1,5 +1,6 @@
 # theJoker-Research
  Binary Star Period Prediction Using Monte Carlo Sampler
+# NOTE INCOMPLETE
 ## Data:
 ## Code:
 ### Current Versions:
