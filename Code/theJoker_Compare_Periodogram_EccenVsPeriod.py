@@ -95,3 +95,5 @@ def getLsPeriodogram(sources):
 # getPlots returns nothing but saves individual plots as pngs and one file as pdf
 def getPlots(osurces,jData,periodogram,joker,prior_sample):
     pdf=FPDF(unit='in',format=[8.5,11])
+
+# INCOMPLETE
