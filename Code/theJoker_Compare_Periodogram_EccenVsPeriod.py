@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import lightkurve as lk
+from sympy import source
 import thejoker as tj
 from fpdf import FPDF
 #endregion
@@ -29,7 +30,8 @@ def getStarData(apogeeFileName,tessFileName,binariesFile):
     tessData=tessData[tessData['separation']<2.*u.arcsec] # Separation Filter
     # Join Tables
     sources=at.join(binaries,tessData,keys='APOGEE_ID')
-    sources=sources=sources[10:21]
+    print(sources)
+    sources=sources=sources[10:12]
     return apogeeVisits, sources
 
 # getJokerRVData returns RV Data from Joker
@@ -98,14 +100,14 @@ def getLsPeriodogram(sources):
 
 # getPlots returns nothing but saves individual plots as pngs and one file as pdf
 def getPlots(sources,jData,periodogram,joker,prior_sample):
-    pdf=FPDF(unit='in',format=[8.5,11]) # commented out b/c notebook returned strange error
+    pdf=FPDF(unit='in',format=[11,8.5]) # commented out b/c notebook returned strange error
     for i in range(len(sources['APOGEE_ID'])):
         # Titles
         supTitle='APOGEE ID: '+str(sources[i]['APOGEE_ID']+' | TIC ID: TIC'+str(sources[i]['TICID']))
         plot1Title='Eccentricity vs Period'
         plot2Title='Lomb Scargle Periodogram'
         # Figure Creation
-        fig,(ax1,ax2)=plt.subplots(nrows=2,ncols=1,figsize=(20,10),facecolor='w',sharex='all')
+        fig,(ax1,ax2)=plt.subplots(nrows=2,ncols=1,figsize=(15,10),facecolor='w',sharex='all')
         fig.suptitle(supTitle)
         # plot 1
         sample=joker.rejection_sample(jData[i],prior_sample)
@@ -125,19 +127,19 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
         fig.savefig(pngPath,dpi=150)
         # PDF Save commented out B/C FPDF error
-        # pdf.add_page()
-        # pdf.image(pngPath,w=8,h=9.6)
-        # print(supTitle+' DONE')
-        # pdf.output('/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PDFs/All_Periodogram_EccenPeriod_Plots.pdf','F')
+        pdf.add_page()
+        pdf.image(pngPath,w=10,h=6.67)
+        print(supTitle+' DONE')
+    pdf.output('/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PDFs/All_Periodogram_EccenPeriod_Plots.pdf','F')
     print('Plots saved as PDF')
 
 apogeeFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allVisit-r12-l33.fits'
 tessFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
-binaryMetadataFile='Data/allStarLite-metadata.fits'
+binaryMetadataFile='/Users/jonahgoldfine/Desktop/thejoker-Research/Data/allStarLite-metadata.fits'
 apogeeData,sourceData=getStarData(apogeeFile,tessFile,binaryMetadataFile)
-jokerRVData=getJokerRVData(apogeeData,sourceData)
-lsPeriodogramData=getLsPeriodogram(sourceData)
-prior=tj.JokerPrior.default(P_min=0.2*u.day,P_max=25*u.day,sigma_K0=300*u.km/u.s,sigma_v=100*u.km/u.s)
-joker=tj.TheJoker(prior)
-priorSample=prior.sample(100_00)
-getPlots(sourceData,jokerRVData,lsPeriodogramData,joker,priorSample)
+# jokerRVData=getJokerRVData(apogeeData,sourceData)
+# lsPeriodogramData=getLsPeriodogram(sourceData)
+# prior=tj.JokerPrior.default(P_min=0.2*u.day,P_max=25*u.day,sigma_K0=300*u.km/u.s,sigma_v=100*u.km/u.s)
+# joker=tj.TheJoker(prior)
+# priorSample=prior.sample(100_00)
+# getPlots(sourceData,jokerRVData,lsPeriodogramData,joker,priorSample)
