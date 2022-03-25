@@ -136,9 +136,9 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
 #tessFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
 #binaryMetadataFile='/Users/jonahgoldfine/Desktop/thejoker-Research/Data/allStarLite-metadata.fits'
 #endregion
-apogeeFile='~/theJoker-Research/Data/allVisit-r12-l33.fits'
-tessFile='~/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
-binaryMetadataFile='~/thejoker-Research/Data/allStarLite-metadata.fits'
+apogeeFile='/scratch/jdg577/theJoker/Data/allVisit-r12-l33.fits'
+tessFile='/scratch/jdg577/theJoker/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
+binaryMetadataFile='/scratch/jdg577/theJoker/Data/allStarLite-metadata.fits'
 apogeeData,sourceData=getStarData(apogeeFile,tessFile,binaryMetadataFile)
 jokerRVData=getJokerRVData(apogeeData,sourceData)
 lsPeriodogramData=getLsPeriodogram(sourceData)
