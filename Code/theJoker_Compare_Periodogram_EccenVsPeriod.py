@@ -30,8 +30,7 @@ def getStarData(apogeeFileName,tessFileName,binariesFile):
     tessData=tessData[tessData['separation']<2.*u.arcsec] # Separation Filter
     # Join Tables
     sources=at.join(binaries,tessData,keys='APOGEE_ID')
-    print(sources)
-    sources=sources=sources[10:12]
+    sources=sources[:100]
     return apogeeVisits, sources
 
 # getJokerRVData returns RV Data from Joker
@@ -54,7 +53,7 @@ def getLightCurveData(sources):
     for tic in sources['TICID']:
         ticStr='TIC'+str(tic)
         ticList.append(ticStr)
-        print(ticStr)
+        # print(ticStr)
         try:
             lcCollection=lk.search_lightcurve(target=ticStr,mission='TESS').download_all()
             lcStitch=lcCollection.stitch().remove_nans().remove_outliers()
@@ -66,10 +65,10 @@ def getLightCurveData(sources):
             timeList.append(time)
             fluxList.append(flux)
             fluxErrList.append(fluxErr)
-            print('Success')
+            # print('Success')
         except:
-            print('Fail')
-            print('Probably MergeConflictError and/or TableMergeError')
+            # print('Fail')
+            # print('Probably MergeConflictError and/or TableMergeError')
             timeList.append([])
             fluxList.append([])
             fluxErrList.append([])
@@ -114,7 +113,6 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         ax1.plot(sample['P'],sample['e'],'k.')
         ax1.set_xlabel('Period (d)')
         ax1.set_ylabel('Eccentricity')
-        ax1.set_xscale('log')
         ax1.set_title(plot1Title)
         # Plot 2
         freq=periodogram[i]['Period']
@@ -124,22 +122,28 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         ax2.set_ylabel('Power')
         ax2.set_title(plot2Title)
         # save figure
-        pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
+        # local path
+        # pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
+        pngPath='~/scratch/jdg577/theJoker/Plots/PNGs/PerGram_EccenPer_'+str(sources[i]['APOGEE_ID'])+'.png'
         fig.savefig(pngPath,dpi=150)
         # PDF Save commented out B/C FPDF error
         pdf.add_page()
         pdf.image(pngPath,w=10,h=6.67)
-        print(supTitle+' DONE')
-    pdf.output('/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PDFs/All_Periodogram_EccenPeriod_Plots.pdf','F')
+        # print(supTitle+' DONE')
+    pdf.output('~/scratch/jdg577/theJoker/Plots/PDFs/All_PerGram_EccenPer.pdf','F')
     print('Plots saved as PDF')
-
-apogeeFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allVisit-r12-l33.fits'
-tessFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
-binaryMetadataFile='/Users/jonahgoldfine/Desktop/thejoker-Research/Data/allStarLite-metadata.fits'
+#region local Filepaths
+#apogeeFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allVisit-r12-l33.fits'
+#tessFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
+#binaryMetadataFile='/Users/jonahgoldfine/Desktop/thejoker-Research/Data/allStarLite-metadata.fits'
+#endregion
+apogeeFile='~/theJoker-Research/Data/allVisit-r12-l33.fits'
+tessFile='~/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
+binaryMetadataFile='~/thejoker-Research/Data/allStarLite-metadata.fits'
 apogeeData,sourceData=getStarData(apogeeFile,tessFile,binaryMetadataFile)
-# jokerRVData=getJokerRVData(apogeeData,sourceData)
-# lsPeriodogramData=getLsPeriodogram(sourceData)
-# prior=tj.JokerPrior.default(P_min=0.2*u.day,P_max=25*u.day,sigma_K0=300*u.km/u.s,sigma_v=100*u.km/u.s)
-# joker=tj.TheJoker(prior)
-# priorSample=prior.sample(100_00)
-# getPlots(sourceData,jokerRVData,lsPeriodogramData,joker,priorSample)
+jokerRVData=getJokerRVData(apogeeData,sourceData)
+lsPeriodogramData=getLsPeriodogram(sourceData)
+prior=tj.JokerPrior.default(P_min=0.2*u.day,P_max=25*u.day,sigma_K0=300*u.km/u.s,sigma_v=100*u.km/u.s)
+joker=tj.TheJoker(prior)
+priorSample=prior.sample(100_00)
+getPlots(sourceData,jokerRVData,lsPeriodogramData,joker,priorSample)
