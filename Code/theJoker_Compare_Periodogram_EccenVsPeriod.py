@@ -29,7 +29,7 @@ def getStarData(apogeeFileName,tessFileName,binariesFile):
     tessData=tessData[tessData['separation']<2.*u.arcsec] # Separation Filter
     # Join Tables
     sources=at.join(binaries,tessData,keys='APOGEE_ID')
-    sources=sources[:600]
+    sources=sources[150:200]
     return apogeeVisits, sources
 
 # getJokerRVData returns RV Data from Joker
@@ -88,12 +88,20 @@ def getLsPeriodogram(sources):
         period=float(sources[i]['MAP_P']/u.d)
         timeViaLC=lcData[i]['Time']
         fluxViaLC=lcData[i]['Flux']
-        freq,pow=LombScargle(timeViaLC,fluxViaLC).autopower(minimum_frequency=(.1/period),maximum_frequency=(10./period))
-        print('Lomb Scargle Success: ',i, sources[i]['TICID'])
-        freqList.append(freq)
-        per=1./freq
-        perList.append(per)
-        powList.append(pow)
+        try:
+            freq,pow=LombScargle(timeViaLC,fluxViaLC).autopower(minimum_frequency=(.1/period),maximum_frequency=(10./period))
+            # freqList.append(freq)
+            per=1./freq
+            perList.append(per)
+            powList.append(pow)
+            print('Lomb Scargle Success: ',i, sources[i]['TICID'])
+        except:
+            perList.append([])
+            powList.append([])
+            print('Lomb Scargle Fail: ',i, sources[i]['TICID'])
+        pass
+        
+        
     periodogramDataTable=at.QTable([perList,powList],names=('Period','Power'))
     return periodogramDataTable
 
