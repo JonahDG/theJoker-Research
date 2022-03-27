@@ -132,14 +132,14 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         # save figure
         # local path
         # pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
-        pngPath='~/scratch/jdg577/theJoker/Plots/PNGs/PerGram_EccenPer_'+str(sources[i]['APOGEE_ID'])+'.png'
+        pngPath='/scratch/jdg577/theJoker/Plots/PNGs/PerGram_EccenPer_'+str(sources[i]['APOGEE_ID'])+'.png'
         fig.savefig(pngPath,dpi=150)
         # PDF Save commented out B/C FPDF error
         pdf.add_page()
         pdf.image(pngPath,w=10,h=6.67)
         print(supTitle+' DONE')
     # pdf.output('/User/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/All_PerGram_EccenPer.pdf','F')
-    pdf.output('~/scratch/jdg577/theJoker/Plots/PDFs/All_PerGram_EccenPer.pdf','F')
+    pdf.output('/scratch/jdg577/theJoker/Plots/PDFs/All_PerGram_EccenPer.pdf','F')
     print('Plots saved as PDF')
 #region local Filepaths
 # apogeeFile='/Users/jonahgoldfine/Desktop/Research Data/Data/allVisit-r12-l33.fits'
