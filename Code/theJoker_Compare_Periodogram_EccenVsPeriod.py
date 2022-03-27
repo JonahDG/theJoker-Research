@@ -38,7 +38,7 @@ def getJokerRVData(allVisits,sources):
     data=[]
     for row in sources:
         visits=allVisits[allVisits['APOGEE_ID']==row['APOGEE_ID']] # Filters to individual APOGEE Visits
-        print('Joker Running on: ', visits['TICID'])
+        print('Joker Running on: ', visits['APOGEE_ID'])
         datum=tj.RVData(Time(visits['JD'],format='jd'),
             rv=visits['VHELIO']*u.km/u.s,
             rv_err=visits['VRELERR']*u.km/u.s)
