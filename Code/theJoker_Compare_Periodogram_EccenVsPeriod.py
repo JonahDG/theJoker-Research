@@ -29,7 +29,6 @@ def getStarData(apogeeFileName,tessFileName,binariesFile):
     tessData=tessData[tessData['separation']<2.*u.arcsec] # Separation Filter
     # Join Tables
     sources=at.join(binaries,tessData,keys='APOGEE_ID')
-    sources=sources[150:200]
     return apogeeVisits, sources
 
 # getJokerRVData returns RV Data from Joker
