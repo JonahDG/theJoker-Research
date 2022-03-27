@@ -52,7 +52,7 @@ def getLightCurveData(sources):
     for tic in sources['TICID']:
         ticStr='TIC'+str(tic)
         ticList.append(ticStr)
-        # print(ticStr)
+        print(ticStr)
         try:
             lcCollection=lk.search_lightcurve(target=ticStr,mission='TESS').download_all()
             lcStitch=lcCollection.stitch().remove_nans().remove_outliers()
@@ -88,6 +88,7 @@ def getLsPeriodogram(sources):
         period=float(sources[i]['MAP_P']/u.d)
         timeViaLC=lcData[i]['Time']
         fluxViaLC=lcData[i]['Flux']
+        print(i, sources[i]['TICID'])
         freq,pow=LombScargle(timeViaLC,fluxViaLC).autopower(minimum_frequency=(.1/period),maximum_frequency=(10./period))
         freqList.append(freq)
         per=1./freq
@@ -128,7 +129,7 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         # PDF Save commented out B/C FPDF error
         pdf.add_page()
         pdf.image(pngPath,w=10,h=6.67)
-        # print(supTitle+' DONE')
+        print(supTitle+' DONE')
     pdf.output('~/scratch/jdg577/theJoker/Plots/PDFs/All_PerGram_EccenPer.pdf','F')
     print('Plots saved as PDF')
 #region local Filepaths
