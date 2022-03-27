@@ -64,10 +64,10 @@ def getLightCurveData(sources):
             timeList.append(time)
             fluxList.append(flux)
             fluxErrList.append(fluxErr)
-            # print('Success')
+            print('Light Curve Success: '+ticStr)
         except:
-            # print('Fail')
-            # print('Probably MergeConflictError and/or TableMergeError')
+            print('Light Curve Fail: '+ticStr)
+            print('Probably MergeConflictError and/or TableMergeError')
             timeList.append([])
             fluxList.append([])
             fluxErrList.append([])
@@ -88,8 +88,8 @@ def getLsPeriodogram(sources):
         period=float(sources[i]['MAP_P']/u.d)
         timeViaLC=lcData[i]['Time']
         fluxViaLC=lcData[i]['Flux']
-        print(i, sources[i]['TICID'])
         freq,pow=LombScargle(timeViaLC,fluxViaLC).autopower(minimum_frequency=(.1/period),maximum_frequency=(10./period))
+        print('Lomb Scargle Success: ',i, sources[i]['TICID'])
         freqList.append(freq)
         per=1./freq
         perList.append(per)
