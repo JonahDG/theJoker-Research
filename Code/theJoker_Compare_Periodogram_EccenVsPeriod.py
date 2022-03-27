@@ -135,10 +135,11 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         # pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
         pngPath='/scratch/jdg577/theJoker/Plots/PNGs/PerGram_EccenPer_'+str(sources[i]['APOGEE_ID'])+'.png'
         fig.savefig(pngPath,dpi=150)
+        print(supTitle+' DONE')
         # PDF Save commented out B/C FPDF error
         pdf.add_page()
         pdf.image(pngPath,w=10,h=6.67)
-        print(supTitle+' DONE')
+        print(supTitle+' Aded to PDF')
     # pdf.output('/User/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/All_PerGram_EccenPer.pdf','F')
     pdf.output('/scratch/jdg577/theJoker/Plots/PDFs/All_PerGram_EccenPer.pdf','F')
     print('Plots saved as PDF')
