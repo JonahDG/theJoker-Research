@@ -130,12 +130,13 @@ def getPlots(sources,jData,periodogram,joker,prior_sample):
         pdf.add_page()
         pdf.image(pngPath,w=10,h=6.67)
         print(supTitle+' DONE')
+    # pdf.output('/User/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/All_PerGram_EccenPer.pdf','F')
     pdf.output('~/scratch/jdg577/theJoker/Plots/PDFs/All_PerGram_EccenPer.pdf','F')
     print('Plots saved as PDF')
 #region local Filepaths
-#apogeeFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allVisit-r12-l33.fits'
-#tessFile='/Users/jonahgoldfine/Desktop/theJoker-Research/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
-#binaryMetadataFile='/Users/jonahgoldfine/Desktop/thejoker-Research/Data/allStarLite-metadata.fits'
+# apogeeFile='/Users/jonahgoldfine/Desktop/Research Data/Data/allVisit-r12-l33.fits'
+# tessFile='/Users/jonahgoldfine/Desktop/Research Data/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
+# binaryMetadataFile='/Users/jonahgoldfine/Desktop/Research Data/Data/allStarLite-metadata.fits'
 #endregion
 apogeeFile='/scratch/jdg577/theJoker/Data/allVisit-r12-l33.fits'
 tessFile='/scratch/jdg577/theJoker/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
