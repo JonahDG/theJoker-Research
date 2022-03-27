@@ -29,6 +29,7 @@ def getStarData(apogeeFileName,tessFileName,binariesFile):
     tessData=tessData[tessData['separation']<2.*u.arcsec] # Separation Filter
     # Join Tables
     sources=at.join(binaries,tessData,keys='APOGEE_ID')
+    print('Data Tables Formed')
     return apogeeVisits, sources
 
 # getJokerRVData returns RV Data from Joker
@@ -36,6 +37,7 @@ def getJokerRVData(allVisits,sources):
     data=[]
     for row in sources:
         visits=allVisits[allVisits['APOGEE_ID']==row['APOGEE_ID']] # Filters to individual APOGEE Visits
+        print('Joker Running on: ', visits['TICID'])
         datum=tj.RVData(Time(visits['JD'],format='jd'),
             rv=visits['VHELIO']*u.km/u.s,
             rv_err=visits['VRELERR']*u.km/u.s)
