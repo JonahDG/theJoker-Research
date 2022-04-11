@@ -118,10 +118,10 @@ def getPlots(sources,jData,periodogram):
         fig,(ax1,ax2)=plt.subplots(nrows=2,ncols=1,figsize=(15,10),facecolor='w',sharex='all')
         fig.suptitle(supTitle)
         # plot 1
-        joker=tj.JokerPrior.default(P_min=periodogram[i]['MAP_P']/10.*u.day,
+        prior=tj.JokerPrior.default(P_min=periodogram[i]['MAP_P']/10.*u.day,
         P_max=periodogram[i]['MAP_P']/.1*u.day,
         sigma_K0=300*u.km/u.s, sigma_v=100*u.km/u.s)
-        joker=tj.theJoker(prior)
+        joker=tj.TheJoker(prior)
         prior_sample=prior.sample(100_00)
         sample=joker.rejection_sample(jData[i],prior_sample)
         ax1.plot(sample['P'],sample['e'],'o',color='black',rasterized=True)
@@ -138,8 +138,8 @@ def getPlots(sources,jData,periodogram):
         ax2.set_xlabel('Period (d)')
         ax2.set_ylabel('Power')
         ax2.set_title(plot2Title)
-        ax2.axvline(x=periodList[i]/0.1,color='red')
-        ax2.axvline(x=periodList[i]/10,color='red')
+        # ax2.axvline(x=periodList[i]/0.1,color='red')
+        # ax2.axvline(x=periodList[i]/10,color='red')
         # save figure
         # local path
         # pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
