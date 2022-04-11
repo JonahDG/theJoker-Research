@@ -120,7 +120,7 @@ def getPlots(sources,jData,periodogram):
         # plot 1
         joker=tj.JokerPrior.default(P_min=periodogram[i]['MAP_P']/10.*u.day,
         P_max=periodogram[i]['MAP_P']/.1*u.day,
-        sigma_k0=300*u.km/u.s, sigma_v=100*u.km/u.s)
+        sigma_K0=300*u.km/u.s, sigma_v=100*u.km/u.s)
         joker=tj.theJoker(prior)
         prior_sample=prior.sample(100_00)
         sample=joker.rejection_sample(jData[i],prior_sample)
