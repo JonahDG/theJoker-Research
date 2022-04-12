@@ -111,7 +111,7 @@ def getPlots(sources,jData,periodogram):
     indivPlotArray=[]
     for i in range(len(sources['APOGEE_ID'])):
         # Titles
-        supTitle='APOGEE ID: '+str(sources[i]['APOGEE_ID']+' | TIC ID: TIC'+str(sources[i]['TICID']))
+        supTitle='APOGEE ID: '+str(sources[i]['APOGEE_ID'])+' | TIC ID: TIC'+str(sources[i]['TICID'])
         plot1Title='Eccentricity vs Period'
         plot2Title='Lomb Scargle Periodogram'
         # Figure Creation
@@ -156,5 +156,4 @@ apogeeData,sourceData=getStarData(apogeeFile,tessFile,binaryMetadataFile)
 jokerRVData=getJokerRVData(apogeeData,sourceData)
 lsPeriodogramData=getLsPeriodogram(sourceData)
 getPlots(sourceData,jokerRVData,lsPeriodogramData)
-
 
