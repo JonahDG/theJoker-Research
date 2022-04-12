@@ -129,8 +129,7 @@ def getPlots(sources,jData,periodogram):
         ax1.set_ylabel('Eccentricity')
         ax1.set_title(plot1Title)
         ax1.set_xscale('log')
-        # ax1.axvline(x=periodList[i]/0.1,color='red')
-        # ax1.axvline(x=periodList[i]/10,color='red')
+        ax1.axvline(x=periodogram[i]['MAP_P'],color='red')
         # Plot 2
         freq=periodogram[i]['Period']
         pow=periodogram[i]['Power']
@@ -138,8 +137,7 @@ def getPlots(sources,jData,periodogram):
         ax2.set_xlabel('Period (d)')
         ax2.set_ylabel('Power')
         ax2.set_title(plot2Title)
-        # ax2.axvline(x=periodList[i]/0.1,color='red')
-        # ax2.axvline(x=periodList[i]/10,color='red')
+        ax2.axvline(x=periodogram[i]['MAP_P'],color='red')
         # save figure
         # local path
         # pngPath='/Users/jonahgoldfine/Desktop/theJoker-Research/Plots/Compare_Periodogram_PeriodVsEccentricity/PNGs/Periodogram_EccenPeriod_'+str(sources[i]['APOGEE_ID'])+'.png'
