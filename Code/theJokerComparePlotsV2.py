@@ -40,7 +40,7 @@ def getJokerRVData(allVisits,sources):
     return data
 
 # get LC time, lc flux, lc flux err
-def get getLCData(sources):
+def getLCData(sources):
     ticList=[]
     timeList=[]
     fluxList=[]
