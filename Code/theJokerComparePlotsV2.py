@@ -22,7 +22,7 @@ def getStarData(apogeeFileName,tessFileName,tessMetaFileName):
     tessData=tessData[tessData['separation']<2.*u.arcsec] # filter out large separationts
     tessMetaData=at.QTable.read(tessMetaFileName)
     # Join Tess Files and  Filter Data
-    sources=at.join(tessMetaData,tessData,key='APOGEE_ID')
+    sources=at.join(tessMetaData,tessData,keys='APOGEE_ID')
     sources=sources[sources['MAP_P']<10*u.d] # Filter out long periods
     sources=sources[:250] #first 250 stars
     print('Data Tables Formed')
@@ -32,8 +32,8 @@ def getStarData(apogeeFileName,tessFileName,tessMetaFileName):
 def getJokerRVData(allVisits,sources):
     data=[]
     for row in sources:
-        visists=allVisit[allVisit['APOGEE_ID']==row['APOGEE_ID']]
-        datum=tj.RVData(Time(visists['JDG'],format='jd'),
+        visists=allVisits[allVisits['APOGEE_ID']==row['APOGEE_ID']]
+        datum=tj.RVData(Time(visists['JD'],format='jd'),
         rv=visists['VHELIO']*u.km/u.s,
         rv_err=visists['VRELERR']*u.km/u.s)
         data.append(datum)
@@ -110,25 +110,25 @@ def getPlots(sources,jData,periodogramData):
         plot2Title='Lomb Scargle Periodogram'
         #figure
         fig,(ax1,ax2)=plt.subplots(nrows=2,ncols=1,
-        figsze=(15,10),facecolor='w',sharex='all')
-        fig.supTitle(supTitle)
+        figsize=(15,10),facecolor='w',sharex='all')
+        fig.suptitle(supTitle)
         # Plot 1
         prior=tj.JokerPrior.default(P_min=periodogramData[i]['MAP_P']/10.*u.d,
         P_max=periodogramData[i]['MAP_P']/.1*u.d,
         sigma_K0=300*u.km/u.s,sigma_v=100*u.km/u.s)
         joker=tj.TheJoker(prior)
-        prior_sample=prior.sampe(100_00)
-        sampe=joker.rejection_sample(jData[i],prior_sample)
+        prior_sample=prior.sample(100_00)
+        sample=joker.rejection_sample(jData[i],prior_sample)
         ax1.plot(sample['P'],sample['e'],'o',color='Black',rasterized=True)
         ax1.set_xlabel('Log(Period) (d)')
         ax1.set_ylabel('Eccentricity')
-        ax1.set_title('plot1Title')
+        ax1.set_title(plot1Title)
         ax1.set_xscale('log')
         ax1.axvline(x=periodogramData[i]['MAP_P'],color='red',alpha=.75)
         # Plot 2
         period=periodogramData[i]['Period']
         power=periodogramData[i]['Power']
-        ax2.plt(period,power,rasterized=True)
+        ax2.plot(period,power,rasterized=True)
         ax2.set_xlabel('Log(Period) (d)')
         ax2.set_ylabel('Power')
         ax2.axvline(x=periodogramData[i]['MAP_P'],color='red',alpha=.75)
@@ -140,7 +140,7 @@ def getPlots(sources,jData,periodogramData):
         print(supTitle+' Plotted')
     merger=PdfFileMerger()
     for subPDF in indivPlotArray:
-        merger.append(PdfFileMerger(subPDF,'rb'))
+        merger.append(PdfFileReader(subPDF,'rb'))
     merger.write('/scratch/jdg577/theJoker/Plots/PDFs/ComparePlotsFull.pdf')
 apogeeFile='/scratch/jdg577/theJoker/Data/allVisit-r12-l33.fits'
 tessFile='/scratch/jdg577/theJoker/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
