@@ -22,15 +22,20 @@ from PyPDF2 import PdfFileMerger,PdfFileReader
 def getStarData(apogeeFileName,tessFileName,binariesFile):
     # APOGEE Vists Data
     apogeeVisits=at.Table.read(apogeeFileName)
+    print('APOGEE Read')
     # Binary Catalog
     binaries=at.QTable.read(binariesFile)
+    print('Meta Read')
     # TESS Data
     tessData=at.QTable.read(tessFileName)
+    print('Tess Read')
     tessData=tessData[tessData['separation']<2.*u.arcsec] # Separation Filter
     # Join Tables
     sources=at.join(binaries,tessData,keys='APOGEE_ID')
+    print('TESS and Meta Joined')
     sources=sources[sources['MAP_P']<10*u.d]
-    sources=sources[:250]
+    sources=sources[250:]
+    # Filter with gold sample
     print('Data Tables Formed')
     return apogeeVisits, sources
 
@@ -115,7 +120,7 @@ def getPlots(sources,jData,periodogram):
         plot1Title='Eccentricity vs Period'
         plot2Title='Lomb Scargle Periodogram'
         # Figure Creation
-        fig,(ax1,ax2)=plt.subplots(nrows=2,ncols=1,figsize=(15,10),facecolor='w',sharex='all')
+        fig,(ax1,ax2)=plt.subplots(nrows=2,ncols=1,figsize=(15,10),facecolor='w',shrex='all')
         fig.suptitle(supTitle)
         # plot 1
         prior=tj.JokerPrior.default(P_min=periodogram[i]['MAP_P']/10.*u.day,
@@ -149,10 +154,11 @@ def getPlots(sources,jData,periodogram):
     for subPDF in indivPlotArray:
         merger.append(PdfFileReader(subPDF,'rb'))
     merger.write('/scratch/jdg577/theJoker/Plots/PDFs/PerGram_EccenPer_Full.pdf')
-apogeeFile='/scratch/jdg577/theJoker/Data/allVisit-r12-l33.fits'
+# apogeeFile='/scratch/jdg577/theJoker/Data/allVisit-r12-l33.fits'
+goldSample='/scratch/jdg577/theJoker/Data/gold_sample.fits'
 tessFile='/scratch/jdg577/theJoker/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
 binaryMetadataFile='/scratch/jdg577/theJoker/Data/allStarLite-metadata.fits'
-apogeeData,sourceData=getStarData(apogeeFile,tessFile,binaryMetadataFile)
+apogeeData,sourceData=getStarData(goldSample,tessFile,binaryMetadataFile)
 jokerRVData=getJokerRVData(apogeeData,sourceData)
 lsPeriodogramData=getLsPeriodogram(sourceData)
 getPlots(sourceData,jokerRVData,lsPeriodogramData)

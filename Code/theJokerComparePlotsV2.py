@@ -24,7 +24,8 @@ def getStarData(apogeeFileName,tessFileName,tessMetaFileName):
     # Join Tess Files and  Filter Data
     sources=at.join(tessMetaData,tessData,keys='APOGEE_ID')
     sources=sources[sources['MAP_P']<10*u.d] # Filter out long periods
-    sources=sources[:250] #first 250 stars
+    print('Number of Short Period Stars: ',len(sources))
+    # sources=sources[0:250] #first 250 stars
     print('Data Tables Formed')
     return apogeeVisits, sources
 
@@ -34,8 +35,8 @@ def getJokerRVData(allVisits,sources):
     for row in sources:
         visists=allVisits[allVisits['APOGEE_ID']==row['APOGEE_ID']]
         datum=tj.RVData(Time(visists['JD'],format='jd'),
-        rv=visists['VHELIO']*u.km/u.s,
-        rv_err=visists['VRELERR']*u.km/u.s)
+        rv=visists['VHELIO'],
+        rv_err=visists['VRELERR'])
         data.append(datum)
     return data
 
@@ -124,6 +125,7 @@ def getPlots(sources,jData,periodogramData):
         ax1.set_ylabel('Eccentricity')
         ax1.set_title(plot1Title)
         ax1.set_xscale('log')
+        ax1.set_ylim(0,1)
         ax1.axvline(x=periodogramData[i]['MAP_P'],color='red',alpha=.75)
         # Plot 2
         period=periodogramData[i]['Period']
@@ -140,9 +142,10 @@ def getPlots(sources,jData,periodogramData):
         print(supTitle+' Plotted')
     merger=PdfFileMerger()
     for subPDF in indivPlotArray:
-        merger.append(PdfFileReader(subPDF,'rb'))
-    merger.write('/scratch/jdg577/theJoker/Plots/PDFs/ComparePlotsFull.pdf')
-apogeeFile='/scratch/jdg577/theJoker/Data/allVisit-r12-l33.fits'
+        merger.append(PdfFileReader(open(subPDF,'rb'),strict=False))
+    merger.write('/scratch/jdg577/theJoker/Plots/PDFs/ComparePlotsFull_test.pdf')
+apogeeFile='/scratch/jdg577/theJoker/Data/allVisits-r12-l33.fits'
+# apogeeFile='/scratch/jdg577/theJoker/Data/gold_sample.fits'
 tessFile='/scratch/jdg577/theJoker/Data/allStarLite-r12-l33-tess_2min-max_20arcsec-xm.fits'
 tessMetaDataFile='/scratch/jdg577/theJoker/Data/allStarLite-metadata.fits'
 apogeeData,sourceData=getStarData(apogeeFile,tessFile,tessMetaDataFile)
