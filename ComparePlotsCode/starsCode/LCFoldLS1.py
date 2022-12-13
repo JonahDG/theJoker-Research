@@ -10,24 +10,30 @@ from fpdf import FPDF
 
 def main():
 	starsFile='/scratch/jdg577/theJoker/Data/starsData/apogee_id-ticid-filtered.fits'
-	stars=at.Table.read(metaListFile)
+	stars=at.Table.read(starsFile)
 	plotPathList=[]
 	for star in stars:
 		apogeeid=star['APOGEE_ID']
 		ticid=star['TICID']
+		# print(apogeeid, ticid)
 		LombScargleFile=f'/scratch/jdg577/theJoker/Data/starsData/%s_%s/%s_%s-1TermLombScargle.fits'\
 		%(apogeeid,ticid,apogeeid,ticid)
+		# print(LombScargleFile)
 		LombScargle=at.Table.read(LombScargleFile)
 		Freq=LombScargle['Frequency']
 		Pow=LombScargle['Power']
+		# print(Freq,Pow)
 		bestFreq=getBestFreq(Freq,Pow)
 		bestPer=1./bestFreq
-		
+		# print(bestPer)
 		lightCurveFile=f'/scratch/jdg577/theJoker/Data/starsData/%s_%s/%s_%s-LightCurve.fits'\
 		%(apogeeid,ticid,apogeeid,ticid)
+		# print(lightCurveFile)
 		lightCurve=at.Table.read(lightCurveFile)
-		plotPath=(bestPer,lightCurve,star)
+		plotPath=getPlots(bestPer,lightCurve,star)
 		plotPathList.append(plotPath)
+		# print(plotPath)
+		# print('next')
 	savePNGsToSinglePDF(plotPathList)
 
 
@@ -46,7 +52,7 @@ def getPlots(period,LCData,metaRow):
 	apogeeid=metaRow['APOGEE_ID']
 	ticid=metaRow['TICID']
 	modes=period*np.array([0,1./3.,1./2.,2./3.,1.,3./2.,2.,3.])
-	print(modes)
+	# print(modes)
 	#Titles
 	supTitle=f'Light Curves Folded @ Modes of 1 Term Best Lomb Scargle Period\n APOGEE \
 	ID: %s\n TIC ID: %s' % (str(apogeeid), str(ticid))
@@ -57,11 +63,11 @@ def getPlots(period,LCData,metaRow):
 	fig.suptitle(supTitle)
 
 	#Make Subplots
-	print(axes.flat)
+	# print(axes.flat)
 	for i,ax in enumerate(axes.flat):
-		print(i,ax)
+		# print(i,ax)
 		if i==0:
-			print('Raw Data')
+			# print('Raw Data')
 			plot=ax.scatter(LCData['Time'],LCData['Flux'],\
 				marker='o',s=3,edgecolor='None',alpha=1,\
 				c=LCData['Time'],cmap='plasma')
@@ -71,7 +77,7 @@ def getPlots(period,LCData,metaRow):
 			fig.colorbar(plot,ax=axes.ravel().tolist(),label='TESS Time (d)')
 		else:
 			subTitle=f'Folded @ %.2f (d)'%(modes[i])
-			print(subTitle)
+			# print(subTitle)
 			plot=ax.scatter((LCData['Time']%modes[i]),\
 				LCData['Flux'],marker='o',s=3,edgecolor='None',\
 				alpha=0.5,c=LCData['Time'],cmap='plasma')
@@ -82,12 +88,14 @@ def getPlots(period,LCData,metaRow):
 		pngFile='/scratch/jdg577/theJoker/Plots/starPlots/'\
 			+str(apogeeid)+'_'+str(ticid)+'/'\
 		 	+str(apogeeid)+'_'+str(ticid)+'-LC1_Fold.png'
+		# print(pngFile)
 		if os.path.exists('/scratch/jdg577/theJoker/Plots/starPlots/'+str(apogeeid)+'_'+str(ticid)+'/')==False:
 			os.mkdir('/scratch/jdg577/theJoker/Plots/starPlots/'+str(apogeeid)+'_'+str(ticid)+'/')
 		else:
 			pass
 	fig.savefig(pngFile)
-	print(supTitle+' DONE!')
+	# print(supTitle+' DONE!')
+	# print(pngFile)
 	return pngFile
 
 def savePDFsToSinglePDF(plots):
@@ -104,7 +112,7 @@ def savePNGsToSinglePDF(plots):
 	for subPNG in plots:
 		pdf.add_page()
 		pdf.image(subPNG,w=10,h=3.125)
-		print(f'%s Saved to PDF'%subPNG)
+		# print(f'%s Saved to PDF'%subPNG)
 	pdf.output('/scratch/jdg577/theJoker/Plots/starPlots/PlotTypePDFs/LC1_Fold_From_PNGs.pdf','F')
 	print('Done!')
 

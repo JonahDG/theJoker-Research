@@ -54,7 +54,7 @@ def main():
 		bestFreqComp=getBestFreq(freqComp,powComp)
 		bestPerComp=1./bestFreqComp
 
-		fileLC=f'/scratch/djg577/theJoker/Data/starsData/%s_%s/%s_%s-LightCurve.fits'\
+		fileLC=f'/scratch/jdg577/theJoker/Data/starsData/%s_%s/%s_%s-LightCurve.fits'\
 		%(apogeeid,ticid,apogeeid,ticid)
 		LightCurve=at.Table.read(fileLC)
 

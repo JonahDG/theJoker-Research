@@ -10,7 +10,7 @@ from fpdf import FPDF
 
 def main():
 	starsFile='/scratch/jdg577/theJoker/Data/starsData/apogee_id-ticid-filtered.fits'
-	stars=at.Table.read(metaListFile)
+	stars=at.Table.read(starsFile)
 	plotPathList=[]
 	for star in stars:
 		apogeeid=star['APOGEE_ID']
@@ -26,7 +26,7 @@ def main():
 		lightCurveFile=f'/scratch/jdg577/theJoker/Data/starsData/%s_%s/%s_%s-LightCurve.fits'\
 		%(apogeeid,ticid,apogeeid,ticid)
 		lightCurve=at.Table.read(lightCurveFile)
-		plotPath=(bestPer,lightCurve,star)
+		plotPath=getPlots(bestPer,lightCurve,star)
 		plotPathList.append(plotPath)
 	savePNGsToSinglePDF(plotPathList)
 
