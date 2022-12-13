@@ -45,7 +45,7 @@ def main():
 		freq24=_24['Frequency']
 		pow24=_24['Power']
 		bestFreq24=getBestFreq(freq24,pow24)
-		bestPer=1./bestFreq24
+		bestPer24=1./bestFreq24
 
 		# composite=at.vstack([_02,_13,_24])
 		composite=at.vstack([_13,_24])
@@ -118,7 +118,7 @@ def getPlots(period,LCData,metaRow,BLSType):
 		else:
 			print('else')
 			foldFrac=modes[i]/period
-			subTitle=f'Folded @ %.2f (%.2f Times BEst Period)'%(modes[i],foldFrac)
+			subTitle=f'Folded @ %.2f (%.2f Times Best Period)'%(modes[i],foldFrac)
 			print(subTitle)
 			plot=ax.scatter((LCData['Time']%modes[i]),\
 				LCData['Flux'], marker='o',s=3,\
