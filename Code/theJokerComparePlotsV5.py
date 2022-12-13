@@ -34,7 +34,7 @@ def getStarData(apogeeVisitsFile,starFile,jokerSampleFile,separationFile):
     sources=at.join(sources,samplesTable,keys='APOGEE_ID') # Filters any stars we don't have joker data for
     sources=sources[sources['MAP_P']<10*u.d] # filters out MAP Periods larger than 10 days
     sources=sources[sources['separation']<2*u.arcsec] # filters out any separation larger than 2 arcseconds
-    sources=sources[:10] # shortens source stars for testing
+    # sources=sources[:10] # shortens source stars for testing
     return apogeeVisits, sources
 
 def getLCData(sources):
