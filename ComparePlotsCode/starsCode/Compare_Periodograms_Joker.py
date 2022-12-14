@@ -142,7 +142,7 @@ def getPlots(jokerSamples,\
 			ax.set_ylabel('Power')
 	pngFile=f'/scratch/jdg577/theJoker/Plots/starPlots/%s_%s/%s_%s-Compare_Periodograms_Joker.png'%(str(APOGEE_ID),str(TICID),str(APOGEE_ID),str(TICID))
 	if os.path.exists(f'/scratch/jdg577/theJoker/Plots/starPlots/%s_%s/'%(str(APOGEE_ID),str(TICID)))==False:
-		os.mkdir(f'/scratch/jdg577/theJoker/Plots/starPlots/%s_%s/'%(str(APOGEE_ID),str(TICID)))
+ 		os.mkdir(f'/scratch/jdg577/theJoker/Plots/starPlots/%s_%s/'%(str(APOGEE_ID),str(TICID)))
 	else:
 		pass
 	fig.savefig(pngFile)
