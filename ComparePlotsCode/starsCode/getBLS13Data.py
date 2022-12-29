@@ -27,7 +27,7 @@ def main():
 		LC=pullLC(ticid,apogeeid,starFolder)
 		low=1
 		high=3
-		p=mp.Process(target=getLowHighBLS,args=(LC,mapp,ticid,apogeeid,h,l,starFolder))
+		p=mp.Process(target=getLowHighBLS,args=(LC,mapp,ticid,apogeeid,high,low,starFolder))
 		p.start()
 		processes.append(p)
 		pList.append([apogeeid,ticid])
@@ -46,8 +46,8 @@ def getLowHighBLS(LCDATA,MAPP,TIC,APOGEE,HIGH,LOW,STARS):
 	perioType='BLS_'+str(LOW)+str(HIGH)
 	lowPow=LOW/2.-1.
 	highPow=HIGH/2.-1.
-	minP=20**lowPow
-	maxP=20**highPow
+	minP=(20**lowPow)*MAPP
+	maxP=(20**highPow)*MAPP
 	data=at.Table()
 	results=BoxLeastSquares(time,flux).autopower(duration=minP/2.,minimum_period=minP,maximum_period=maxP)
 	period=results.period 
