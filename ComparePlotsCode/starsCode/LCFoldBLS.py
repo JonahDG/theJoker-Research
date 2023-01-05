@@ -98,7 +98,7 @@ def getPlots(period,LCData,metaRow,BLSType):
 	modes=period*np.array([0,1./3,1./2,2./3,1.,3./2,2.,3.])
 	#Super Title
 	supTitle=f'Light Curves Folded @ Modes of sections of BLS Periodogram\n\
-	APOGEE ID: %s/n TIC ID: %s'%(str(apogeeid),str(ticid))
+	APOGEE ID: %s\n TIC ID: %s'%(str(apogeeid),str(ticid))
 	#Figure
 	fig,axes=plt.subplots(nrows=4,ncols=2,figsize=(32,10),\
 		facecolor='w',constrained_layout=True,dpi=75)
